@@ -20,8 +20,12 @@ import {
   Database,
   Download,
   RefreshCw,
+  Printer,
+  QrCode,
+  Globe,
 } from 'lucide-react';
 import { Settings } from '../types';
+import { printPollingBoothPoster } from '../utils/printHelper';
 
 interface AdminSettingsProps {
   settings: Settings;
@@ -472,6 +476,90 @@ export function AdminSettings({ settings, onUpdateSettings, onShowAlert }: Admin
                 <option value="after_ended">⏳ Tampilkan Setelah Pemilihan Selesai</option>
                 <option value="realtime">🌐 Tampilkan Realtime ke Siswa</option>
               </select>
+            </div>
+          </div>
+
+          {/* METODE PELAKSANAAN VOTING (BILIK SUARA VS ONLINE MANDIRI) */}
+          <div className="pt-3 border-t border-slate-200 dark:border-slate-800 space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div>
+                <label className="block text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <QrCode className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+                  <span>Metode Pelaksanaan Pemilihan (Voting Mode)</span>
+                </label>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Pilih bagaimana siswa memberikan suaranya: mendatangi Bilik Suara di TPS Sekolah (Default) atau secara Online Mandiri.
+                </p>
+              </div>
+
+              {(formData.voting_mode === 'booth' || !formData.voting_mode) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const originUrl = window.location.origin;
+                    printPollingBoothPoster({
+                      schoolName: formData.school_name,
+                      eventTitle: formData.event_title,
+                      academicYear: formData.academic_year,
+                      schoolAddress: formData.school_address,
+                      schoolLogo: formData.school_logo,
+                      voteUrl: originUrl,
+                      boothNumber: '1 Utama',
+                      onSuccess: () => onShowAlert('success', 'Poster Siap', 'Poster A4 Bilik Suara berhasil dicetak.'),
+                      onError: () => onShowAlert('error', 'Gagal Cetak', 'Gagal memicu pencetakan poster A4.'),
+                    });
+                  }}
+                  className="py-2 px-3 bg-cyan-700 hover:bg-cyan-800 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 shadow-xs transition-colors shrink-0 cursor-pointer"
+                >
+                  <Printer className="w-4 h-4" />
+                  <span>Cetak Poster QR Bilik Suara (A4)</span>
+                </button>
+              )}
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+              {/* Option 1: Bilik Suara (Default) */}
+              <div
+                onClick={() => setFormData({ ...formData, voting_mode: 'booth' })}
+                className={`p-3.5 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                  formData.voting_mode === 'booth' || !formData.voting_mode
+                    ? 'border-cyan-600 dark:border-cyan-500 bg-cyan-50/60 dark:bg-cyan-950/40'
+                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <div className={`p-2 rounded-lg shrink-0 ${formData.voting_mode === 'booth' || !formData.voting_mode ? 'bg-cyan-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600'}`}>
+                  <Vote className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h4 className="text-xs font-bold text-slate-900 dark:text-white">1. Bilik Suara TPS (Default Sekolah)</h4>
+                    <span className="text-[10px] font-extrabold px-1.5 py-0.2 bg-cyan-600 text-white rounded-md">REKOMENDASI</span>
+                  </div>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                    Siswa mendatangi bilik suara fisik di sekolah. QR Code ditempel di bilik suara (Poster A4). Siswa memindai QR code lalu memasukkan username & password pada kartu pemilih.
+                  </p>
+                </div>
+              </div>
+
+              {/* Option 2: Online Mandiri */}
+              <div
+                onClick={() => setFormData({ ...formData, voting_mode: 'anywhere' })}
+                className={`p-3.5 rounded-xl border-2 transition-all cursor-pointer flex items-start gap-3 ${
+                  formData.voting_mode === 'anywhere'
+                    ? 'border-indigo-600 dark:border-indigo-500 bg-indigo-50/60 dark:bg-indigo-950/40'
+                    : 'border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 opacity-70 hover:opacity-100'
+                }`}
+              >
+                <div className={`p-2 rounded-lg shrink-0 ${formData.voting_mode === 'anywhere' ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-600'}`}>
+                  <Globe className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-bold text-slate-900 dark:text-white">2. Online Mandiri (Bisa di Mana Saja)</h4>
+                  <p className="text-[11px] text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                    Siswa dapat mengakses link aplikasi dari mana saja via smartphone/laptop masing-masing dengan memindai QR code unik di Kartu Pemilih.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>

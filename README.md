@@ -19,10 +19,14 @@ Dibangun dengan arsitektur **Full-Stack TypeScript** (React 19 + Tailwind CSS + 
 - **Cetak Kartu Login / Hak Pilih**: Dilengkapi fitur cetak kartu pemilih siap gunting yang memuat nama, kelas, username, password, dan QR Code untuk login instan.
 - **Filter & Pencarian Cepat**: Filter berdasarkan tingkatan kelas, jurusan, kategori (Siswa / Dewan Guru), dan status memilih.
 
-### 3. 🎯 Manajemen Paslon & Program Kerja
+### 3. 🎯 Manajemen Paslon & Cloudinary Media Hosting
 - Nomor urut paslon, foto profil Ketua & Wakil Ketua.
 - Visi, Misi berbasis daftar terstruktur, dan Program Kerja Unggulan.
-- Penyimpanan foto otomatis ke **Cloudinary** (menghemat beban database).
+- **Penyimpanan Foto 100% Cloudinary (Bukan Lokal)**: Seluruh foto paslon & logo sekolah diunggah langsung ke Cloudinary via Server API. Berkas foto tidak pernah disimpan di folder kode lokal, sehingga repository tetap ringan dan teratur.
+
+### 4. 🗳️ Dua Metode Pelaksanaan Pemilihan (Voting Mode)
+- **Metode 1: Di Bilik Suara (TPS Sekolah - Default)**: Siswa mendatangi bilik suara fisik di sekolah. QR Code link voting dipasang di bilik suara menggunakan **Poster Resmi A4 Siap Cetak** (lengkap dengan Kop Sekolah, logo, QR code besar, dan 4 tata cara memilih).
+- **Metode 2: Online Mandiri (Bisa di Mana Saja)**: Siswa dapat memindai QR code unik pada Kartu Pemilih masing-masing untuk memberikan suara secara langsung dari mana saja.
 
 ### 4. 📊 Dashboard Rekapitulasi & Quick Count
 - **Perolehan Suara Real-time**: Grafik perolehan suara paslon dan persentase partisipasi pemilih.

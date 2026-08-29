@@ -55,6 +55,8 @@ function getInitialData(): DatabaseSchema {
       primary_color: '#0891b2', // cyan-600
       footer_text: '© 2026 Komisi Pemilihan Umum OSIS. Asas Luber & Jurdil.',
       election_status: 'draft',
+      voting_mode: 'booth', // 'booth' (Bilik Suara) or 'anywhere' (Online Mandiri)
+      booth_count: 5,
       start_datetime: startDate,
       end_datetime: endDate,
       result_visibility: 'after_ended',

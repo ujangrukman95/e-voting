@@ -235,3 +235,134 @@ export function downloadPrintableHtml(filename: string, contentHtml: string, tit
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * Generates and prints a clean, full-page A4 poster for physical Polling Booths (Bilik Suara)
+ * featuring School Kop, QR Code, and step-by-step voting instructions.
+ */
+export function printPollingBoothPoster({
+  schoolName,
+  eventTitle,
+  academicYear,
+  schoolAddress,
+  schoolLogo,
+  voteUrl,
+  boothNumber,
+  onSuccess,
+  onError,
+}: {
+  schoolName: string;
+  eventTitle: string;
+  academicYear: string;
+  schoolAddress?: string;
+  schoolLogo?: string;
+  voteUrl: string;
+  boothNumber?: number | string;
+  onSuccess?: () => void;
+  onError?: (err: any) => void;
+}): void {
+  const safeSchool = escapeHtml(schoolName || 'PANITIA PEMILIHAN OSIS');
+  const safeEvent = escapeHtml(eventTitle || 'PEMILIHAN KETUA & WAKIL KETUA OSIS');
+  const safeYear = escapeHtml(academicYear || '2026/2027');
+  const safeAddress = escapeHtml(schoolAddress || 'Sekretariat Panitia KPU OSIS');
+  const safeVoteUrl = escapeHtml(voteUrl);
+  const boothTag = boothNumber ? `BILIK SUARA NO. ${boothNumber}` : 'BILIK SUARA E-VOTING';
+
+  const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=450x450&data=${encodeURIComponent(voteUrl)}&margin=10`;
+
+  const posterHtml = `
+    <div style="width: 100%; min-height: 280mm; display: flex; flex-direction: column; justify-content: space-between; border: 4px double #000; padding: 8mm; box-sizing: border-box; background: #ffffff;">
+      
+      <!-- Kop Header -->
+      <div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 16px; border-bottom: 3px solid #000; padding-bottom: 12px; margin-bottom: 16px;">
+          ${
+            schoolLogo
+              ? `<img src="${escapeHtml(schoolLogo)}" style="width: 65px; height: 65px; object-fit: contain;" alt="Logo" />`
+              : `<div style="width: 60px; height: 60px; border: 2px solid #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 24px;">🗳️</div>`
+          }
+          <div style="text-align: center;">
+            <h1 style="font-size: 20px; font-weight: 900; text-transform: uppercase; margin: 0; letter-spacing: 0.5px;">${safeSchool}</h1>
+            <h2 style="font-size: 16px; font-weight: 800; text-transform: uppercase; margin: 2px 0; color: #1e293b;">${safeEvent}</h2>
+            <p style="font-size: 12px; font-weight: 600; margin: 0; color: #475569;">TAHUN PELAJARAN ${safeYear} • ${safeAddress}</p>
+          </div>
+        </div>
+
+        <!-- Banner Bilik -->
+        <div style="background-color: #0f172a; color: #ffffff; text-align: center; padding: 10px; border-radius: 6px; margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #38bdf8;">— PETUNJUK RESMI PEMILIH —</div>
+          <div style="font-size: 24px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-top: 2px;">${boothTag}</div>
+        </div>
+      </div>
+
+      <!-- Main Content: QR Code & Call to Action -->
+      <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; flex-grow: 1; text-align: center; margin: 10px 0;">
+        
+        <p style="font-size: 15px; font-weight: 800; color: #000; margin-bottom: 12px;">
+          ARAHKAN KAMERA SMARTPHONE ANDA KE QR CODE DI BAWAH INI UNTUK MEMBUKA HALAMAN VOTING:
+        </p>
+
+        <!-- Container QR Code -->
+        <div style="border: 3px solid #000; border-radius: 12px; padding: 14px; background: #ffffff; display: inline-block; box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+          <img src="${qrImageUrl}" style="width: 250px; height: 250px; display: block;" alt="QR Code Bilik Suara" />
+        </div>
+
+        <div style="margin-top: 10px; background: #f1f5f9; border: 1px border #cbd5e1; border-radius: 6px; padding: 6px 14px; display: inline-block;">
+          <span style="font-size: 11px; font-weight: 700; color: #334155;">URL Alternatif: </span>
+          <span style="font-size: 12px; font-weight: 800; font-family: monospace; color: #0f172a;">${safeVoteUrl}</span>
+        </div>
+      </div>
+
+      <!-- Step by Step Instructions -->
+      <div style="border-top: 2px solid #000; padding-top: 14px; margin-top: 10px;">
+        <h3 style="font-size: 13px; font-weight: 800; text-transform: uppercase; margin: 0 0 10px 0; text-align: center; letter-spacing: 0.5px; color: #0f172a;">
+          📍 TATA CARA PEMILIHAN DI BILIK SUARA (4 LANGKAH MUDAH):
+        </h3>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div style="border: 1px solid #000; border-radius: 6px; padding: 8px 10px; background: #fafafa; display: flex; items-center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background: #000; color: #fff; font-weight: 900; font-size: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; shrink: 0;">1</div>
+            <div style="font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.2;">
+              <strong>Scan QR Code</strong> di atas menggunakan kamera HP / Pemindai QR.
+            </div>
+          </div>
+
+          <div style="border: 1px solid #000; border-radius: 6px; padding: 8px 10px; background: #fafafa; display: flex; items-center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background: #000; color: #fff; font-weight: 900; font-size: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; shrink: 0;">2</div>
+            <div style="font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.2;">
+              <strong>Masukkan Username & Password</strong> yang ada pada Kartu Pemilih Anda.
+            </div>
+          </div>
+
+          <div style="border: 1px solid #000; border-radius: 6px; padding: 8px 10px; background: #fafafa; display: flex; items-center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background: #000; color: #fff; font-weight: 900; font-size: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; shrink: 0;">3</div>
+            <div style="font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.2;">
+              <strong>Pilih Paslon Ketua & Wakil</strong> pilihan Anda sesuai nurani.
+            </div>
+          </div>
+
+          <div style="border: 1px solid #000; border-radius: 6px; padding: 8px 10px; background: #fafafa; display: flex; items-center; gap: 8px;">
+            <div style="width: 24px; height: 24px; background: #000; color: #fff; font-weight: 900; font-size: 13px; border-radius: 50%; display: flex; align-items: center; justify-content: center; shrink: 0;">4</div>
+            <div style="font-size: 11px; font-weight: 700; color: #0f172a; line-height: 1.2;">
+              Klik <strong>"Kirim Suara"</strong>. Hak suara Anda otomatis tersimpan secara anonim!
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer Note -->
+        <div style="margin-top: 14px; text-align: center; border-top: 1px dashed #cbd5e1; padding-top: 8px; font-size: 10px; font-weight: 700; color: #475569;">
+          🔒 JAMINAN KERAHASIAAN • SISTEM E-VOTING MENGGUNAKAN ANONYMOUS SECRET BALLOT (ASAS LUBER & JURDIL)
+        </div>
+      </div>
+
+    </div>
+  `;
+
+  printDocument({
+    title: `Poster A4 Bilik Suara - ${safeSchool}`,
+    contentHtml: posterHtml,
+    onSuccess,
+    onError,
+  });
+}
+

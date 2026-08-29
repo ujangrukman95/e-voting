@@ -45,6 +45,7 @@ export interface Vote {
 
 export type ElectionStatus = 'draft' | 'ongoing' | 'ended';
 export type ResultVisibility = 'hidden' | 'after_ended' | 'realtime';
+export type VotingMode = 'booth' | 'anywhere';
 
 export interface Settings {
   school_name: string;
@@ -55,6 +56,8 @@ export interface Settings {
   primary_color?: string;
   footer_text?: string;
   election_status: ElectionStatus;
+  voting_mode?: VotingMode; // 'booth' (Default di Bilik Suara TPS) or 'anywhere' (Online Mandiri via Kartu)
+  booth_count?: number;
   start_time?: string | null;
   end_time?: string | null;
   start_datetime?: string;
