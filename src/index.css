@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Global dark mode root adjustments */
+html.dark {
+  color-scheme: dark;
+}
+
+html.dark body {
+  background-color: #090d16;
+  color: #f1f5f9;
+}
+
+/* Apply subtle and sleek slight border radius across the application */
+.rounded-xl, .rounded-2xl, .rounded-3xl, .rounded-lg {
+  border-radius: 6px !important;
+}
+
+.rounded, .rounded-md {
+  border-radius: 4px !important;
+}
+
+.rounded-sm {
+  border-radius: 2px !important;
+}
+
+.rounded-full {
+  border-radius: 9999px !important;
+}
+
+/* Dark mode base inputs & selects fallback */
+.dark input:not([type="checkbox"]):not([type="radio"]), 
+.dark select, 
+.dark textarea {
+  color: #f8fafc;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 8mm 8mm;
+  }
+  
+  html, html.dark, body, html.dark body {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11px !important;
+    line-height: 1.4 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Force all printed elements to light paper background & high contrast black text */
+  html.dark * {
+    background-color: transparent !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Voter Cards: Exactly 4 Horizontal Landscape Strip Cards per A4 Sheet (Monochrome / B&W) */
+  #printable-cards-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3mm !important;
+    width: 100% !important;
+  }
+
+  html.dark .voter-card-print-item,
+  .voter-card-print-item {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1.5px solid #000000 !important;
+    border-radius: 4px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    height: 65mm !important;
+    max-height: 66mm !important;
+    min-height: 63mm !important;
+    padding: 2mm 3.5mm 1mm 3.5mm !important;
+    box-sizing: border-box !important;
+    overflow: hidden !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    margin-bottom: 0 !important;
+  }
+
+  .voter-card-print-item img {
+    filter: grayscale(100%) contrast(125%) !important;
+    -webkit-filter: grayscale(100%) contrast(125%) !important;
+  }
+
+  .voter-card-print-item:nth-child(4n) {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+
+  /* Official Berita Acara 1-Page Fit */
+  #printable-official-report {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Force hide all screen UI on print */
+  nav, header, footer, button, .print\:hidden {
+    display: none !important;
+  }
+
+  .print-page-a4 {
+    display: block !important;
+    width: 100% !important;
+  }
+}
+

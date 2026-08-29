@@ -1,0 +1,6 @@
+{
+  "name": "E-Voting OSIS",
+  "description": "Aplikasi E-Voting Pemilihan Ketua dan Wakil Ketua OSIS modern, responsif, aman, dan berintegritas untuk sekolah.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

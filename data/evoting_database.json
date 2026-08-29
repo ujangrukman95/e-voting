@@ -1,0 +1,50 @@
+{
+  "users": [
+    {
+      "id": "usr_admin_01",
+      "username": "admin",
+      "name": "Administrator OSIS",
+      "role": "superadmin",
+      "password_hash": "$2b$10$O3sQbIdYbuqMW4L1pHHQEuH3dI1EMOsT0IvDP4vO/khkSpjvD7ofK",
+      "created_at": "2026-08-29T04:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "school_name": "SMAN 1 Sukabumi",
+    "school_logo": "",
+    "school_address": "Jl. Ir. H. Djuanda No. 16, Cikole, Kota Sukabumi, Jawa Barat 43113",
+    "academic_year": "2026/2027",
+    "event_title": "PEMILIHAN KETUA & WAKIL KETUA OSIS",
+    "primary_color": "#0891b2",
+    "footer_text": "© 2026 Komisi Pemilihan Umum OSIS. Asas Luber & Jurdil.",
+    "election_status": "draft",
+    "start_datetime": "2026-08-29T07:00:00",
+    "end_datetime": "2026-08-29T17:00:00",
+    "result_visibility": "after_ended",
+    "enable_sound_effects": true,
+    "principal_name": "Drs. H. Rachmat Hidayat, M.Pd.",
+    "principal_nip": "19680514 199403 1 004",
+    "committee_chair": "Ketua Panitia OSIS",
+    "chair_nis": "",
+    "osis_advisor": "Pembina OSIS",
+    "advisor_nip": "",
+    "committee_secretary": "Sekretaris Panitia",
+    "secretary_nis": "",
+    "witness_1_name": "",
+    "witness_2_name": ""
+  },
+  "candidates": [],
+  "students": [],
+  "votes": [],
+  "audit_logs": [
+    {
+      "id": "log_01",
+      "user_name": "System",
+      "action": "System Init",
+      "description": "Inisialisasi sistem E-Voting OSIS siap digunakan",
+      "activity": "Inisialisasi sistem E-Voting OSIS siap digunakan",
+      "ip_address": "127.0.0.1",
+      "timestamp": "2026-08-29T04:00:00.000Z"
+    }
+  ]
+}
